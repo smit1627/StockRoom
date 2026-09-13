@@ -9,31 +9,42 @@ const app = express();
 
 app.use(helmet());
 
-const configuredOrigins = (env.CORS_ORIGINS || env.FRONTEND_URL)
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
+const configuredOrigins = (
+  env.CORS_ORIGINS ||
+  env.FRONTEND_URL ||
+  ""
+)
+  .split(",")
+  .map((origin) => origin.trim().replace(/\/$/, ""))
+  .filter(Boolean);
 
-const isPrivateDevOrigin = (origin) => {
-    if (process.env.NODE_ENV === "production") return false;
-    try {
-        const { hostname, port } = new URL(origin);
-        const isLocalHost = hostname === "localhost" || hostname === "127.0.0.1";
-        const isPrivateIpv4 = /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(hostname);
-        return (isLocalHost || isPrivateIpv4) && ["5173", "4173"].includes(port);
-    } catch {
-        return false;
-    }
-};
-
-app.use(cors({
+app.use(
+  cors({
     origin(origin, callback) {
-        // Browsers send an Origin header; API tools and same-machine health checks may not.
-        if (!origin || configuredOrigins.includes(origin) || isPrivateDevOrigin(origin)) return callback(null, true);
-        return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+      // Allow requests without an Origin header, such as health checks.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+
+      if (configuredOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      if (isPrivateDevOrigin(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      console.error("Blocked CORS origin:", origin);
+      return callback(new Error(`Origin ${origin} is not allowed by CORS`));
     },
     credentials: true,
-}));
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
+  })
+);
 
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
