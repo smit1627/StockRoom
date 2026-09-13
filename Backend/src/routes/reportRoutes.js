@@ -1,0 +1,1 @@
+const router=require("express").Router(),c=require("../controllers/reportController"),{requireAuth}=require("../middleware/auth");router.use(requireAuth);router.get("/dashboard",c.dashboard);router.get("/inventory",c.inventory);router.get("/stock-movement",c.stockMovement);router.get("/low-stock",c.lowStock);router.get("/transactions",c.transactions);module.exports=router;

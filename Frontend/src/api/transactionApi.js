@@ -1,0 +1,1 @@
+import api from "./axios";export const listTransactions=params=>api.get("/transactions",{params});export const getTransaction=id=>api.get(`/transactions/${id}`);export const createTransaction=body=>api.post("/transactions",body);export const removeTransaction=id=>api.delete(`/transactions/${id}`);

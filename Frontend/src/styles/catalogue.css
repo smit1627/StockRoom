@@ -1,0 +1,1 @@
+.catalogue-toolbar{display:flex;justify-content:space-between;align-items:center;margin:-3px 0 18px;color:var(--muted);font:500 10px "DM Mono",monospace;letter-spacing:.25px}.report-toolbar{margin-bottom:20px}@media(max-width:500px){.catalogue-toolbar{gap:10px;align-items:flex-start;flex-direction:column}}

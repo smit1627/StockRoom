@@ -1,0 +1,1 @@
+const router=require("express").Router(),c=require("../controllers/companyController"),{requireAuth,allowRoles}=require("../middleware/auth"),{uploadImage,uploadError}=require("../middleware/upload");router.use(requireAuth);router.get("/",c.get);router.put("/",allowRoles("admin"),uploadImage,uploadError,c.update);module.exports=router;
