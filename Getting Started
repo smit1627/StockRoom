@@ -1,0 +1,282 @@
+Getting Started
+Prerequisites
+
+Make sure you have the following installed:
+
+Node.js
+
+npm
+
+Git
+
+A Supabase project
+
+1. Clone the Repository
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+cd YOUR_REPOSITORY
+
+Replace the repository URL with your actual GitHub repository.
+
+2. Install Dependencies
+
+Install dependencies for both frontend and backend.
+
+cd frontend
+npm install
+cd ../backend
+npm install
+3. Configure Environment Variables
+
+Create a .env file in the backend directory.
+
+Example:
+
+PORT=3000
+
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+SUPABASE_ANON_KEY=your_supabase_anon_key
+
+FRONTEND_URL=http://localhost:5173
+
+Create a .env file in the frontend directory if required by the project.
+
+Example:
+
+VITE_API_URL=http://localhost:3000/api
+
+Never commit .env files, Supabase service-role keys, or other sensitive credentials to GitHub.
+
+4. Set Up Supabase
+
+Create a project in Supabase.
+
+Configure the PostgreSQL database.
+
+Apply the required database schema and migrations.
+
+Configure authentication.
+
+Add the required environment variables.
+
+Ensure the backend can connect to Supabase.
+
+5. Run the Backend
+cd backend
+npm run dev
+
+The backend will run on the configured port, commonly:
+
+http://localhost:3000
+6. Run the Frontend
+
+Open another terminal:
+
+cd frontend
+npm run dev
+
+The frontend will run on the Vite development server, commonly:
+
+http://localhost:5173
+API Overview
+
+The backend exposes REST API routes for the main application modules.
+
+Typical route groups include:
+
+/api/auth
+/api/products
+/api/categories
+/api/transactions
+/api/company
+/api/reports
+/api/health
+
+The exact endpoints and request formats depend on the implementation.
+
+SKU Generation
+
+SKUs are generated automatically by the backend/database.
+
+Example:
+
+VEER-260912-0002
+
+Where:
+
+VEER = Company prefix
+
+260912 = Creation date in YYMMDD format
+
+0002 = Unique sequential identifier
+
+SKU Rules
+
+SKUs must be globally unique.
+
+SKU generation must not depend on a frontend counter.
+
+Duplicate Part Codes are allowed.
+
+Existing SKUs must remain unchanged.
+
+Concurrent product creation must not produce duplicate SKUs.
+
+The backend/database is responsible for enforcing uniqueness.
+
+Data Integrity
+
+The application is designed to preserve accurate historical records.
+
+Important principles:
+
+Historical transactions retain their original quantities and prices.
+
+Editing a product does not rewrite historical transaction totals.
+
+Stock Movement is based on actual transaction-product relationships.
+
+Product IDs/SKUs are used for internal relationships.
+
+Deleting products must not silently corrupt historical records.
+
+Stock-changing operations are handled safely on the backend.
+
+Duplicate transaction submissions are prevented.
+
+Existing data is preserved during schema changes.
+
+Reports and Export
+
+Reports support:
+
+Date-range filtering
+
+Pagination
+
+Refresh
+
+Print
+
+Excel export
+
+Print and Excel export should use the same filtered dataset displayed by the report.
+
+Excel exports include all matching records, not only the currently visible pagination page.
+
+Development Guidelines
+
+When contributing to the project:
+
+Inspect the existing architecture before making changes.
+
+Preserve working functionality.
+
+Reuse existing components and styles.
+
+Avoid unnecessary dependencies.
+
+Keep frontend and backend logic synchronized.
+
+Do not expose sensitive credentials.
+
+Do not use frontend-only validation for critical business rules.
+
+Test changes on both desktop and mobile.
+
+Do not claim a feature is complete without testing it.
+
+Testing Checklist
+
+Before considering a major change complete, verify:
+
+Products
+Add a product
+Edit a product
+Part Code is stored in uppercase
+SKU is generated automatically
+SKU remains unique
+Duplicate Part Codes work correctly
+Search works by name, Part Code, and SKU
+Transactions
+Stock In works
+Stock Out works
+Multiple products can be added
+Available stock is correct
+Quantities update correctly
+Transaction totals are correct
+Remarks are saved
+Duplicate transactions are prevented
+Reports
+Inventory Report displays correct fields
+Stock Movement shows individual product movements
+Transactions Report shows complete transactions
+Low Stock Report displays descriptions/notes
+Date filtering works
+Pagination works
+Refresh works
+Print contains only the intended report
+Excel export respects filters
+Excel export includes all filtered records
+Mobile
+No broken layouts
+No overlapping buttons
+Search works properly
+Tables remain usable
+Pagination works
+Date filters work
+Forms are comfortable to use
+Security
+
+Keep all sensitive credentials in environment variables.
+
+Never expose the Supabase service-role key to the frontend.
+
+Use backend authorization for protected operations.
+
+Validate incoming API requests.
+
+Use appropriate database constraints and permissions.
+
+Do not commit secrets to GitHub.
+
+Future Improvements
+
+Potential future enhancements may include:
+
+Advanced inventory analytics
+
+More detailed dashboard statistics
+
+Improved audit logs
+
+Additional report customization
+
+Barcode or QR-code support
+
+More granular permissions
+
+Automated backups and monitoring
+
+License
+
+This project is developed for Veer Enterprise.
+
+Add a specific license here if you intend to make the project open source.
+
+Author
+
+Smit Chauhan
+
+GitHub: @smit1627 
+
+
+### Before uploading
+
+Replace these placeholders:
+
+- `smit1627/stockroom`
+- The illustrative project structure, if it differs from your actual folders
+- Any tech-stack items you are not using
+
+And make sure `.env` is in your `.gitignore`. **Do not upload Supabase service-role keys to G
